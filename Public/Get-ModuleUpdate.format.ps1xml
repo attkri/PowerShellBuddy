@@ -1,0 +1,149 @@
+<<<<<<< HEAD
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Configuration>
+    <ViewDefinitions>
+        <View>
+            <Name>DefaultView</Name>
+            <ViewSelectedBy>
+                <TypeName>ModuleInfo</TypeName>
+            </ViewSelectedBy>
+            <TableControl>
+                <TableHeaders>
+
+                    <TableColumnHeader>
+                        <Label>Name</Label>
+                        <Width>25</Width>
+                        <Alignment>Left</Alignment>
+                    </TableColumnHeader>
+
+                    <TableColumnHeader>
+                        <Label>LocalVersion</Label>
+                        <Width>15</Width>
+                        <Alignment>Left</Alignment>
+                    </TableColumnHeader>
+
+                    <TableColumnHeader>
+                        <Label>GalleryVersion</Label>
+                        <Width>15</Width>
+                        <Alignment>Left</Alignment>
+                    </TableColumnHeader>
+
+                    <TableColumnHeader>
+                        <Label>UpdateStatus</Label>
+                        <Width>20</Width>
+                        <Alignment>Left</Alignment>
+                    </TableColumnHeader>
+
+                    <TableColumnHeader>
+                        <Label>LocalModulePath</Label>
+                        <Width>120</Width>
+                        <Alignment>Left</Alignment>
+                    </TableColumnHeader>
+
+                </TableHeaders>
+                <TableRowEntries>
+                    <TableRowEntry>
+                        <TableColumnItems>
+
+                            <TableColumnItem>
+                                <PropertyName>Name</PropertyName>
+                            </TableColumnItem>
+
+                            <TableColumnItem>
+                                <PropertyName>LocalVersion</PropertyName>
+                            </TableColumnItem>
+
+                            <TableColumnItem>
+                                <PropertyName>GalleryVersion</PropertyName>
+                            </TableColumnItem>
+
+                            <TableColumnItem>
+                                <PropertyName>UpdateStatus</PropertyName>
+                            </TableColumnItem>
+
+                            <TableColumnItem>
+                                <PropertyName>LocalModulePath</PropertyName>
+                            </TableColumnItem>
+
+                        </TableColumnItems>
+                    </TableRowEntry>
+                </TableRowEntries>
+            </TableControl>
+        </View>
+    </ViewDefinitions>
+</Configuration>
+=======
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Configuration>
+    <ViewDefinitions>
+        <View>
+            <Name>DefaultView</Name>
+            <ViewSelectedBy>
+                <TypeName>ModuleInfo</TypeName>
+            </ViewSelectedBy>
+            <TableControl>
+                <TableHeaders>
+
+                    <TableColumnHeader>
+                        <Label>Name</Label>
+                        <Width>25</Width>
+                        <Alignment>Left</Alignment>
+                    </TableColumnHeader>
+
+                    <TableColumnHeader>
+                        <Label>LocalVersion</Label>
+                        <Width>15</Width>
+                        <Alignment>Left</Alignment>
+                    </TableColumnHeader>
+
+                    <TableColumnHeader>
+                        <Label>GalleryVersion</Label>
+                        <Width>15</Width>
+                        <Alignment>Left</Alignment>
+                    </TableColumnHeader>
+
+                    <TableColumnHeader>
+                        <Label>UpdateStatus</Label>
+                        <Width>20</Width>
+                        <Alignment>Left</Alignment>
+                    </TableColumnHeader>
+
+                    <TableColumnHeader>
+                        <Label>LocalModulePath</Label>
+                        <Width>120</Width>
+                        <Alignment>Left</Alignment>
+                    </TableColumnHeader>
+
+                </TableHeaders>
+                <TableRowEntries>
+                    <TableRowEntry>
+                        <TableColumnItems>
+
+                            <TableColumnItem>
+                                <PropertyName>Name</PropertyName>
+                            </TableColumnItem>
+
+                            <TableColumnItem>
+                                <PropertyName>LocalVersion</PropertyName>
+                            </TableColumnItem>
+
+                            <TableColumnItem>
+                                <PropertyName>GalleryVersion</PropertyName>
+                            </TableColumnItem>
+
+                            <TableColumnItem>
+                                <PropertyName>UpdateStatus</PropertyName>
+                            </TableColumnItem>
+
+                            <TableColumnItem>
+                                <PropertyName>LocalModulePath</PropertyName>
+                            </TableColumnItem>
+
+                        </TableColumnItems>
+                    </TableRowEntry>
+                </TableRowEntries>
+            </TableControl>
+        </View>
+    </ViewDefinitions>
+</Configuration>
+>>>>>>> 47bdafb926307894e343ff9720d2bc56b970228c
