@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 TOPIC
 AKPT
 
@@ -61,67 +60,3 @@ Get-ChildItem -Path "$AkptModulePath\Wissen"
 
 Für Experimente steht meinen Teilnehmern folgende Datei zur Verfügung: 
 Get-ChildItem -Path "$AkptModulePath\_Schnippsel.ps1"
-=======
-TOPIC
-AKPT
-
-SHORT DESCRIPTION
-Beschreibung des AKPT-Modules
-
-LONG DESCRIPTION
-Beschreibung des AKPT-Modules
-
-ENTHALTENE FEATURE
-
-* PowerShell-Wissen zum nachschlagen basierend auf meine Seminare / Workshops
-* Cmdlets
-* Type-Erweiterungen
-* PowerShell-Prompt anpassungen
-* Tipp des Tages
-
-CMDLETS
-
-* ConvertTo-SecretKey
-* ConvertFrom-EncryptedData
-* ConvertTo-EncryptedData
-* Get-About
-* Get-BingPicture
-* Get-ComProgId
-* Get-DirectorySize
-* Get-Enum
-* Get-EuroExchange
-* Get-Hotkeys
-* Get-Product
-* Get-ProductKey
-* Install-PSVSCode
-* Invoke-Pause
-* Out-MiniDump
-* Read-Window
-* Show-Graph
-
-TYPENERWEITERUNGEN
-
-* Jedes Object besitzt eine Funktion .ShowObjekt() => Öffnet ein PropertyGrid und zeigt die Properties des Objektes im Window an.
-* Jedes Object besitzt eine Funktion .GetHelp() und zeigt die Online-Doku der Klasse an.
-
-POWERSHELL-ANPASSUNGEN
-
-* PowerShell-Prompt mit Anzeige der Dauer des letzten Befehls.
-
-MODULE AKPT DATEI-STRUKTUR
-
-Diese Module enthält zahlreiche neu Cmdlets. 
-Der dazugehörige Code befindet sich hier: 
-Get-ChildItem -Path "$AkptModulePath\Public"
-
-Für die öffentlichen Cmdlet.ps1-Dateien und das Module selbst
-sind Pester-UTest vorhanden und befinden sich hier:
-Get-ChildItem -Path "$AkptModulePath\Tests"
-
-Mein Wissen, Beispielen, Workshop-Daten und Schulungsunterlagen
-können im folgendem Order strukturiert abgerufen werden:
-Get-ChildItem -Path "$AkptModulePath\Wissen"
-
-Für Experimente steht meinen Teilnehmern folgende Datei zur Verfügung: 
-Get-ChildItem -Path "$AkptModulePath\_Schnippsel.ps1"
->>>>>>> 47bdafb926307894e343ff9720d2bc56b970228c
