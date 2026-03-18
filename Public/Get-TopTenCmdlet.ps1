@@ -1,15 +1,15 @@
-﻿function Get-TopTenCmdlet {
+function Get-TopTenCmdlet {
     [CmdletBinding()]
     param ()
 
     $Content = @(
-        [PSCustomObject]@{ Platz = 1 ; Name = 'Get-Member'     ; Beschreibung = 'Objekt-Analyse. Zeigt den Objekt-Typ auf und dessen verfügbaren Mitglieder wie Eigenschaften, Methoden, und Ereignisse.' },
-        [PSCustomObject]@{ Platz = 2 ; Name = 'Get-Command'    ; Beschreibung = 'Findet und listet alle verfügbaren Cmdlets, Funktionen, Aliase und Anwendungen auf und kann die Syntax anzeigen.' },
-        [PSCustomObject]@{ Platz = 3 ; Name = 'Get-Help'       ; Beschreibung = 'Zeigt Hilfeinformationen für Cmdlets sowie PS-Konzepte an.' },
-        [PSCustomObject]@{ Platz = 4 ; Name = 'Select-Object'  ; Beschreibung = 'Das Pipeline-Objekt anpassen, bzgl. Was und Wie viel soll angezeigt werden.' }
-        [PSCustomObject]@{ Platz = 5 ; Name = 'Where-Object'   ; Beschreibung = 'Die Pipeline-Objekte über Kriterien filtern.' }
-        [PSCustomObject]@{ Platz = 6 ; Name = 'Sort-Object'    ; Beschreibung = 'Die Pipeline-Objekte sortieren.' }
-        [PSCustomObject]@{ Platz = 7 ; Name = 'Measure-Object' ; Beschreibung = 'Das Pipeline-Objekte nach einer Eigenschaft messen.' }
+        [PSCustomObject]@{ Rank = 1 ; Name = 'Get-Member'     ; Description = 'Inspect an object type and explore its available properties, methods, and events.' },
+        [PSCustomObject]@{ Rank = 2 ; Name = 'Get-Command'    ; Description = 'Find available cmdlets, functions, aliases, and applications, and inspect their syntax.' },
+        [PSCustomObject]@{ Rank = 3 ; Name = 'Get-Help'       ; Description = 'Read help content for commands and PowerShell concepts.' },
+        [PSCustomObject]@{ Rank = 4 ; Name = 'Select-Object'  ; Description = 'Shape pipeline output by controlling what is returned and how much is shown.' }
+        [PSCustomObject]@{ Rank = 5 ; Name = 'Where-Object'   ; Description = 'Filter pipeline objects by using conditions.' }
+        [PSCustomObject]@{ Rank = 6 ; Name = 'Sort-Object'    ; Description = 'Sort pipeline objects.' }
+        [PSCustomObject]@{ Rank = 7 ; Name = 'Measure-Object' ; Description = 'Measure pipeline data by count, sum, average, or property values.' }
     )
 
     return $Content 

@@ -1,17 +1,17 @@
 # TODO Next Level: https://bradwilson.io/blog/prompt/powershell
 <#
 .SYNOPSIS
-    Ersetzt das Prompt gegen ein neues Prompt.
+    Replaces the current prompt with an enhanced prompt.
 .DESCRIPTION
-    Ersetzt das aktuelle PowerShell-Prompt temporär gegen ein neues Prompt mit folgenden Informationen: Admin-Rechte-Status, Anmeldename, Datum, Arbeitsverzeichnis.
+    Temporarily replaces the current PowerShell prompt with a richer prompt that shows elevation state, user name, date, and working directory.
 .PARAMETER Off
-    Setzt das alte Prompt wieder ein.
+    Restores the original prompt.
 .EXAMPLE
     Use-NewPrompt
-    Einschalten.
+    Enable the custom prompt.
 .EXAMPLE
     Use-NewPrompt -Off
-    Ausschalten.
+    Disable the custom prompt.
 #>
 function Use-NewPrompt {
     [CmdletBinding()]
@@ -26,10 +26,23 @@ function Use-NewPrompt {
     if(!$Off) {
         {
             $esc = [char]0x1b
-            $CurrentIdentity = [Security.Principal.WindowsIdentity]::GetCurrent()
-            $CurrentUserIsElevated = ([Security.Principal.WindowsPrincipal]$CurrentIdentity).IsInRole([Security.Principal.WindowsBuiltInRole]'Administrator')
-            $CurrentUsername = $CurrentIdentity.Name.Split('\')[1]
-            $CurrentDate = Get-Date -Format 'ddd., dd.MM. HH:mm'
+            $CurrentUsername = [Environment]::UserName
+            $CurrentUserIsElevated = $false
+
+            if ($IsWindows) {
+                try {
+                    $CurrentIdentity = [Security.Principal.WindowsIdentity]::GetCurrent()
+                    $CurrentUserIsElevated = ([Security.Principal.WindowsPrincipal]$CurrentIdentity).IsInRole([Security.Principal.WindowsBuiltInRole]'Administrator')
+                    $CurrentUsername = $CurrentIdentity.Name.Split('\')[-1]
+                }
+                catch {
+                }
+            }
+            elseif ($CurrentUsername -eq 'root') {
+                $CurrentUserIsElevated = $true
+            }
+
+            $CurrentDate = (Get-Date).ToString('ddd, yyyy-MM-dd HH:mm', [System.Globalization.CultureInfo]::InvariantCulture)
             $LastCommandDuration = 0
             $LastCommand = Get-History -Count 1
             if ($null -ne $LastCommand) {

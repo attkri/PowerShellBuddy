@@ -1,0 +1,68 @@
+TOPIC
+about_PowerShellBuddy
+
+SHORT DESCRIPTION
+Overview of the PowerShellBuddy module.
+
+LONG DESCRIPTION
+PowerShellBuddy is a lightweight collection of practical PowerShell commands for
+everyday scripting, exploration, and interactive shell work.
+
+It combines small utilities for logging, hashing, prompt customization, weather
+and news lookups, keyboard shortcut references, and workstation readiness or
+security-oriented checks.
+
+Some commands are cross-platform, while others are intentionally Windows-
+focused because they depend on WPF, Defender, certificate stores, or the
+System.Speech APIs.
+
+INCLUDED COMMAND GROUPS
+
+    Discovery and inspection
+    * Get-Enum
+    * Get-ParameterInfo
+    * Get-ModuleUpdate
+
+    Everyday utilities
+    * Get-Weather
+    * Get-PowerShellNews
+    * Get-Quote
+    * Get-StringHash
+    * Out-Log
+    * Start-Countdown
+
+    Developer helpers
+    * Get-Hotkey
+    * Use-NewPrompt
+    * Test-PSDeveloperReady
+
+    Windows-focused commands
+    * Read-Window
+    * Out-Speech
+    * Test-SecurityState
+
+EXAMPLES
+    Get-Command -Module PowerShellBuddy
+
+    Get-ParameterInfo -CmdletName Get-ChildItem
+
+    Get-Weather -Location Hamburg -OnlyCurrentWeather
+
+    Get-PowerShellNews -AfterDate (Get-Date).AddDays(-30)
+
+    Out-Log -Message 'Build started' -Status Information
+
+NOTE
+    Project website: https://attilakrick.com
+    Source code: https://github.com/attkri/PowerShellBuddy
+
+SEE ALSO
+    README.md
+    https://attilakrick.com
+    https://github.com/attkri/PowerShellBuddy
+
+KEYWORDS
+    PowerShellBuddy
+    PowerShell
+    Utilities
+    Developer Tools

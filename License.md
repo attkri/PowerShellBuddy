@@ -1,38 +1,36 @@
-# Lizenzbedingungen
+# License Terms
 
-## Texte (Dokumentation, Kapitelinhalte)
+## Documentation and Written Content
 
-Die Texte dieses Kompendiums stehen unter der [Creative Commons Namensnennung - Nicht kommerziell 4.0 International Lizenz (CC BY-NC 4.0)](https://creativecommons.org/licenses/by-nc/4.0/deed.de).
+The written content in this repository is licensed under the [Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0)](https://creativecommons.org/licenses/by-nc/4.0/).
 
-### Bedingungen
+### Conditions
 
-- Namensnennung: „Attila Krick – PowerShell meistern“
-- Keine kommerzielle Nutzung erlaubt
-- Weitergaben oder Bearbeitungen nur unter gleicher Lizenz (CC BY-NC 4.0)
+- Attribution: "Attila Krick - PowerShellBuddy" with a reference to [attilakrick.com](https://attilakrick.com)
+- No commercial use without separate permission
+- No additional restrictions beyond the CC BY-NC 4.0 terms
 
-## Code (Beispielskripte, Snippets)
+## Code (Examples, Scripts, Snippets)
 
-Der enthaltene Beispielcode steht unter der **MIT-Lizenz**:
-
-MIT-Lizenz (Deutsch – inoffizielle Übersetzung)
+The code in this repository is provided under the **MIT License**:
 
 Copyright (c) 2025 Attila Krick
 
-Hiermit wird unentgeltlich jeder Person, die eine Kopie der Software und der
-zugehörigen Dokumentationen (die „Software“) erhält, die Erlaubnis erteilt,
-sie uneingeschränkt zu nutzen, einschließlich und ohne Einschränkung des
-Rechts, sie zu verwenden, zu kopieren, zu verändern, zusammenzuführen, zu
-veröffentlichen, zu verbreiten, zu unterlizenzieren und/oder zu verkaufen,
-sowie Personen, denen diese Software zur Verfügung gestellt wird, diese Rechte
-zu verschaffen, unter den folgenden Bedingungen:
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-Der obige Urheberrechtshinweis und dieser Erlaubnishinweis sind in allen
-Kopien oder wesentlichen Teilen der Software beizulegen.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-DIE SOFTWARE WIRD „WIE BESEHEN“ BEREITGESTELLT, OHNE JEDE AUSDRÜCKLICHE ODER
-IMPLIZIERTE GARANTIE, EINSCHLIESSLICH DER GARANTIEN DER MARKTGÄNGIGKEIT, DER
-EIGNUNG FÜR EINEN BESTIMMTEN ZWECK UND DER NICHTVERLETZUNG. IN KEINEM FALL
-SIND DIE AUTOREN ODER COPYRIGHTINHABER FÜR JEGLICHE ANSPRÜCHE, SCHÄDEN ODER
-SONSTIGE HAFTUNGEN VERANTWORTLICH, OB AUS VERTRAG, UNERLAUBTER HANDLUNG ODER
-ANDERWEITIG, DIE AUS, AUFGRUND ODER IM ZUSAMMENHANG MIT DER SOFTWARE ODER DER
-VERWENDUNG ODER SONSTIGEN GESCHÄFTEN MIT DER SOFTWARE ENTSTEHEN.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+

@@ -2,53 +2,58 @@ BeforeAll -Scriptblock {
     . $PSCommandPath.Replace('.Tests.ps1', '.ps1')
 }
 
-Describe -Name "Get-Weather" -Fixture {
+Describe -Name 'Get-Weather' -Fixture {
 
-    It -Name 'Default 1' {
-        # Gibt Wetterdaten für einen gültigen Standort zurück, wenn kein Standort angegeben wird
+    BeforeEach {
+        $script:CapturedUri = $null
+
+        Mock Invoke-RestMethod {
+            param([string]$Uri)
+
+            $script:CapturedUri = $Uri
+            'Mock weather response'
+        }
+    }
+
+    It -Name 'uses the default language and returns the service response' {
+        $language = (Get-Culture).TwoLetterISOLanguageName
+
         $result = Get-Weather
-        $result | Should -Not -BeNullOrEmpty
+
+        $result | Should -Be 'Mock weather response'
+        $script:CapturedUri | Should -Be "https://wttr.in/?lang=$language&F"
     }
 
-    It -Name 'Default 2' {
-        # Gibt Wetterdaten für 3 Tage zurück, wenn kein Standort angegeben wird
-        $result = Get-Weather | Select-String -Pattern 'Früh' -AllMatches | Select-Object -ExpandProperty Matches | Measure-Object
-        $result.Count | Should -Be 3
+    It -Name 'URL-encodes the requested location' {
+        $language = (Get-Culture).TwoLetterISOLanguageName
+
+        Get-Weather -Location 'Köln' | Out-Null
+
+        $script:CapturedUri | Should -Match "^https://wttr\.in/(K%C3%B6ln|Köln)\?lang=$language&F$"
     }
 
-    It -Name "Default 3" {
-        # Gibt Wetterdaten in der OS Sprache zurück
-        $result = Get-Weather -Location Köln -OnlyCurrentWeather
-        $result | Should -MatchExactly 'Wetterbericht für: Köln'
+    It -Name 'adds the current-weather switch flag to the request' {
+        $language = (Get-Culture).TwoLetterISOLanguageName
+
+        Get-Weather -Location 'Athens' -OnlyCurrentWeather | Out-Null
+
+        $script:CapturedUri | Should -Be "https://wttr.in/Athens?lang=$language&F0"
     }
 
-    It -Name '-Location 1' {
-        # Gibt Wetterdaten für einen gültigen Standort zurück
-        $result = Get-Weather -Location Köln
-        $result | Should -Not -BeNullOrEmpty
+    It -Name 'adds one-line output formatting to the request' {
+        $language = (Get-Culture).TwoLetterISOLanguageName
+
+        Get-Weather -Location 'Hamburg' -OnlyCurrentWeather -OneLineOutput | Out-Null
+
+        $script:CapturedUri | Should -Be "https://wttr.in/Hamburg?lang=$language&F0&format=3"
     }
 
-    It -Name '-Location 2' {
-        # Gibt einen Fehler zurück, wenn ein ungültiger Standort angegeben wird
-        { Get-Weather -Location Unbekannter_Ort } | Should -Throw -ExpectedMessage "We were unable to find your location or could not retrieve weather data. Please check your internet connection or the location provided."
-    }
+    It -Name 'throws a friendly error when the weather service fails' {
+        Mock Invoke-RestMethod {
+            throw 'Network failure.'
+        }
 
-    It -Name '-OnlyCurrentWeather 1' {
-        # Gibt Wetterdaten für einen gültigen Standort zurück, wenn nur aktuelle Wetterdaten angefordert werden
-        $result = Get-Weather -Location Köln -OnlyCurrentWeather
-        $result | Should -Not -BeNullOrEmpty
-    }
-
-    $testCases = @(
-        @{Location = 'Würzburg'; ExpectedResult = '^Wetterbericht für: Würzburg' }
-        @{Location = 'London'  ; ExpectedResult = '^Wetterbericht für: London'   }
-        @{Location = 'Αθήνα'   ; ExpectedResult = '^Wetterbericht für: Αθήνα'    }
-    )
-
-    It -Name "TestCase 1 <Location>" -ForEach $testCases -Test {
-        param([string]$Location, [string]$ExpectedResult)
-        $result = Get-Weather -Location $Location -OnlyCurrentWeather
-        $result | Should -MatchExactly $ExpectedResult
+        { Get-Weather -Location 'Unknown' } | Should -Throw -ExpectedMessage 'Unable to retrieve weather data. Check your internet connection or verify the requested location.'
     }
 }
 

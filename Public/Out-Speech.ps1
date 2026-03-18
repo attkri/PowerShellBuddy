@@ -1,49 +1,49 @@
 function Out-Speech {
     <#
         .SYNOPSIS
-        Text zu Sprach-Ausgabe.
+        Converts text into spoken output.
 
         .DESCRIPTION
-        Wandelt String-Objekte in Sprachausgabe um mit Unterstützung für verschiedene Stimmen,
-        asynchrone Wiedergabe und Plattform-Erkennung.
+        Converts string input into speech output with support for voice selection,
+        asynchronous playback, and platform detection.
 
         .PARAMETER TextToSpeech
-        Das String-Objekt das in eine Sprachausgabe umgewandelt werden soll.
+        The text that should be spoken.
 
         .PARAMETER VoiceName
-        Name der zu verwendenden Stimme. Verwende Get-SpeechVoice um verfügbare Stimmen anzuzeigen.
+        Name of the voice to use. Use -ShowAvailableVoices to list installed voices.
 
         .PARAMETER VoiceSpeed
-        Geschwindigkeit der Sprachausgabe von -10 bis 10.
+        Speech rate from -10 to 10.
 
         .PARAMETER Volume
-        Lautstärke der Sprachausgaben von 0 bis 100.
+        Output volume from 0 to 100.
 
         .PARAMETER Asynchronous
-        Startet die Sprachausgabe asynchron ohne auf Beendigung zu warten.
+        Starts speech playback asynchronously without waiting for completion.
 
         .PARAMETER ShowAvailableVoices
-        Zeigt alle verfügbaren Stimmen an und beendet die Funktion.
+        Lists all available voices and exits.
 
         .EXAMPLE
-        Out-Speech -TextToSpeech 'Hallo Welt!'
-        Einfache Text-to-Speech Ausgabe.
+        Out-Speech -TextToSpeech 'Hello world!'
+        Simple text-to-speech output.
 
         .EXAMPLE
-        Out-Speech -TextToSpeech 'Zwölf laxe Typen qualmen verdächtig süße Objekte.' -VoiceSpeed +2 -Volume 80
-        Sprachausgabe mit angepasster Geschwindigkeit und Lautstärke.
+        Out-Speech -TextToSpeech 'PowerShell can automate repetitive work.' -VoiceSpeed 2 -Volume 80
+        Speech output with custom speed and volume.
 
         .EXAMPLE
         Out-Speech -ShowAvailableVoices
-        Zeigt alle verfügbaren Stimmen an.
+        List all available voices.
 
         .EXAMPLE
-        Out-Speech -TextToSpeech 'Asynchrone Nachricht' -Asynchronous
-        Sprachausgabe läuft im Hintergrund weiter.
+        Out-Speech -TextToSpeech 'Background message' -Asynchronous
+        Speech playback continues in the background.
 
         .EXAMPLE
-        'Franz jagt im komplett verwahrlosten Taxi quer durch Bayern', 'Bei jedem klugen Wort von Sokrates rief Xanthippe zynisch: Quatsch!' | Out-Speech
-        Mehrere Texte aus der Pipeline.
+        'Short sentence one', 'Short sentence two' | Out-Speech
+        Speak multiple texts from the pipeline.
     #>
     [CmdletBinding()]
     param(
@@ -73,7 +73,7 @@ function Out-Speech {
             $platform = [System.Environment]::OSVersion.Platform
 
             if ($platform -ne 'Win32NT' -and $PSEdition -ne 'Desktop') {
-                Write-Warning "Out-Speech wird nur auf Windows mit System.Speech voll unterstützt. Auf anderen Plattformen wird eine Warnung angezeigt."
+                Write-Warning 'Out-Speech is fully supported only on Windows with System.Speech available.'
                 return
             }
 
@@ -105,10 +105,10 @@ function Out-Speech {
                     if ($availableVoice) {
                         $Speaker.SelectVoice($availableVoice.VoiceInfo.Name)
                     } else {
-                        Write-Warning "Stimme '$VoiceName' nicht gefunden. Verwende Standardstimme."
+                        Write-Warning "Voice '$VoiceName' was not found. Using the default voice instead."
                     }
                 } catch {
-                    Write-Warning "Fehler beim Auswählen der Stimme: $_"
+                    Write-Warning "Error while selecting the voice: $_"
                 }
             }
 
@@ -116,7 +116,7 @@ function Out-Speech {
             $Speaker.Volume = $Volume
 
         } catch {
-            Write-Error "Fehler beim Initialisieren der Sprachausgabe: $_"
+            Write-Error "Error while initializing speech output: $_"
             if ($Speaker) { $Speaker.Dispose() }
             throw
         }
@@ -131,7 +131,7 @@ function Out-Speech {
                     $Speaker.Speak($TextToSpeech)
                 }
             } catch {
-                Write-Error "Fehler bei der Sprachausgabe: $_"
+                Write-Error "Speech output failed: $_"
             }
         }
     }

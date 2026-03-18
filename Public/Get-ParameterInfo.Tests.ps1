@@ -2,27 +2,27 @@ BeforeAll {
     . $PSCommandPath.Replace('.Tests.ps1', '.ps1')
 }
 
-Describe "Get-ParameterInfo Test" {
-    Context "Parameter" {
-        It "Parameter -CmdletName ist obligatorisch und vom Typ System.String" {
+Describe 'Get-ParameterInfo tests' {
+    Context 'Parameter metadata' {
+        It 'requires -CmdletName as a System.String parameter.' {
             Get-Command -Name Get-ParameterInfo | Should -HaveParameter CmdletName -Type String  -Mandatory
         }
-        It "Parameter -CmdletName validiert mit ValidateNotNullOrEmpty" {
+        It 'validates -CmdletName with ValidateNotNullOrEmpty.' {
             $target = (Get-Command -Name Get-ParameterInfo).Parameters['CmdletName']
             $target = $target.Attributes.Where({$_ -is [System.Management.Automation.ValidateNotNullOrEmptyAttribute]})
             $target | should -Not -BeNullOrEmpty
         }
-        It "Throw => Get-ParameterInfo -CmdletName $null" {
+        It 'throws for Get-ParameterInfo -CmdletName $null.' {
             { Get-ParameterInfo -CmdletName $null } | Should -Throw -ErrorId 'ParameterArgumentValidationError,Get-ParameterInfo'
         }
-        It "Throw => Get-ParameterInfo -CmdletName ''" {
+        It "throws for Get-ParameterInfo -CmdletName ''." {
             { Get-ParameterInfo -CmdletName '' } | Should -Throw -ErrorId 'ParameterArgumentValidationError,Get-ParameterInfo'
         }
-        It "Throw => Get-ParameterInfo -CmdletName 'Gib-EsNicht'" {
-            { Get-ParameterInfo -CmdletName 'Gib-EsNicht' } | Should -Throw -ErrorId 'ParameterArgumentValidationError,Get-ParameterInfo'
+        It "throws for Get-ParameterInfo -CmdletName 'Missing-Command'." {
+            { Get-ParameterInfo -CmdletName 'Missing-Command' } | Should -Throw -ErrorId 'ParameterArgumentValidationError,Get-ParameterInfo'
         }
     }
-    Context "Rueckgabeobjekte vom Aufruf > Get-ParameterInfo -CmdletName 'Test-Dummy' < testen"  {
+    Context "Output objects for Get-ParameterInfo -CmdletName 'Test-Dummy'"  {
         BeforeAll {
             function Test-Dummy {
                 [CmdletBinding(DefaultParameterSetName = 'SetA')]
@@ -59,47 +59,47 @@ Describe "Get-ParameterInfo Test" {
         AfterAll {
             Remove-Item -Path Function:\Test-Dummy -Force -ErrorAction Ignore
         }
-        It "Gibt [CmdletParameterInfo]-Objekte zurueck" {
+        It 'returns [CmdletParameterInfo] objects.' {
 
             $target = Get-ParameterInfo -CmdletName 'Test-Dummy' | Select-Object -First 1
             $target.GetType().FullName | Should -BeExactly 'CmdletParameterInfo'
         }
-        It "Die Rueckgabe-Menge stimmt" {
+        It 'returns the expected number of objects.' {
             Get-ParameterInfo -CmdletName 'Test-Dummy' | Should -HaveCount 5
         }
-        It "Die Rueckgabe enthaelt in der richtigen Reihenfolge alle Parameter-Namen" {
+        It 'returns parameter names in the expected order.' {
             $target = (Get-ParameterInfo -CmdletName 'Test-Dummy' | Select-Object -ExpandProperty 'Name') -join ';'
             $target | Should -BeExactly 'ExParaC;ExParaD;ProgressAction;ExParaA;ExParaB'
         }
-        It "Die Rueckgabe enthaelt in der richtigen Reihenfolge alle Parameter-Aliase" {
+        It 'returns parameter aliases in the expected order.' {
             $target = (Get-ParameterInfo -CmdletName 'Test-Dummy' | Select-Object -ExpandProperty 'Aliases') -join ';'
             $target | Should -BeExactly 'proga;epa;epb;pb'
         }
-        It "Die Rueckgabe enthaelt in der richtigen Reihenfolge alle Parameter-TypeNamen" {
+        It 'returns parameter type names in the expected order.' {
             $target = (Get-ParameterInfo -CmdletName 'Test-Dummy' | Select-Object -ExpandProperty 'TypeName') -join ';'
             $target | Should -BeExactly 'Process[];Int32;ActionPreference;String;SwitchParameter'
         }
-        It "Die Rueckgabe enthaelt in der richtigen Reihenfolge alle Parameter-SetNamen" {
+        It 'returns parameter set names in the expected order.' {
             $target = (Get-ParameterInfo -CmdletName 'Test-Dummy' | Select-Object -ExpandProperty 'SetName') -join ';'
             $target | Should -BeExactly 'AllParameterSets;AllParameterSets;AllParameterSets;SetA (Default);SetB'
         }
-        It "Die Rueckgabe enthaelt in der richtigen Reihenfolge alle Parameter-Positionen" {
+        It 'returns parameter positions in the expected order.' {
             $target = (Get-ParameterInfo -CmdletName 'Test-Dummy' | Select-Object -ExpandProperty 'Position') -join ';'
             $target | Should -BeExactly '1;Named;Named;0;Named'
         }
-        It "Die Rueckgabe enthaelt in der richtigen Reihenfolge alle Parameter-IsMandatories" {
+        It 'returns IsMandatory values in the expected order.' {
             $target = (Get-ParameterInfo -CmdletName 'Test-Dummy' | Select-Object -ExpandProperty 'IsMandatory') -join ';'
             $target | Should -BeExactly 'False;True;False;True;False'
         }
-        It "Die Rueckgabe enthaelt in der richtigen Reihenfolge alle Parameter-IsByValues" {
+        It 'returns IsByValue values in the expected order.' {
             $target = (Get-ParameterInfo -CmdletName 'Test-Dummy' | Select-Object -ExpandProperty 'IsByValue') -join ';'
             $target | Should -BeExactly 'False;False;False;False;True'
         }
-        It "Die Rueckgabe enthaelt in der richtigen Reihenfolge alle Parameter-IsByPropertyNamen" {
+        It 'returns IsByPropertyName values in the expected order.' {
             $target = (Get-ParameterInfo -CmdletName 'Test-Dummy' | Select-Object -ExpandProperty 'IsByPropertyName') -join ';'
             $target | Should -BeExactly 'True;False;False;False;False'
         }
-        It "Die Rueckgabe enthaelt in der richtigen Reihenfolge alle Parameter-IsDynamics" {
+        It 'returns IsDynamic values in the expected order.' {
             $target = (Get-ParameterInfo -CmdletName 'Test-Dummy' | Select-Object -ExpandProperty 'IsDynamic') -join ';'
             $target | Should -BeExactly 'False;True;False;False;False'
         }

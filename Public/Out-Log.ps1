@@ -1,4 +1,6 @@
-﻿Add-Type -TypeDefinition "public enum LogMessageStatus { Unknown, Information, Warning, Error }"
+﻿if (-not ('LogMessageStatus' -as [type])) {
+    Add-Type -TypeDefinition "public enum LogMessageStatus { Unknown, Information, Warning, Error }"
+}
 
 Function Out-Log {
     [CmdletBinding()]
@@ -14,6 +16,7 @@ Function Out-Log {
         [Parameter(Mandatory = $true)]
         [LogMessageStatus]$Status,
 
+        [Alias('PassThru')]
         [switch]$PassThrow
     )
     begin {
@@ -30,7 +33,7 @@ Function Out-Log {
 }
 <#
     Get-Command -Name Write-Log -Syntax
-    Write-Log -Status Information -Message 'Das ist ein Informations-Log-Eintrag.'
-    Write-Log -Status Warning     -Message 'Das ist ein Warnung-Log-Eintrag.'
-    Write-Log -Status Error       -Message 'Das ist ein Fehler-Log-Eintrag.'
+    Write-Log -Status Information -Message 'This is an informational log entry.'
+    Write-Log -Status Warning     -Message 'This is a warning log entry.'
+    Write-Log -Status Error       -Message 'This is an error log entry.'
 #>

@@ -9,10 +9,10 @@ class StringHashInfo {
 Calculate the hash value of a string.
 
 .DESCRIPTION
-Calculate the hash value of a string or a password with a salt value.
+Calculate the hash value of a string or derive a password hash with PBKDF2.
 
 .PARAMETER Algorithm
-The hash algorithm to be used.SHA512 is used by default.
+The hash algorithm to use. `SHA512` is used by default.
 
 .PARAMETER Text
 The text of which is to be calculated.
@@ -21,32 +21,32 @@ The text of which is to be calculated.
 The password of which is to be calculated.
 
 .PARAMETER Salt
-The salt value that is to be used for the calculation (20,000 times) of the password-hashes.
+The salt value used for password hashing. The password path uses PBKDF2-SHA512 with 100,000 iterations.
 
 .NOTES
-The hash value of a password is determined in which the salt value is calculated again 20,000 times in a loop.This procedure protects a) from a rainbow attack and b) due to the long calculation time from the brutal-force attack.
+The password path uses PBKDF2-SHA512 with 100,000 iterations and a 32-byte derived key. This is substantially stronger than a repeated fast hash such as MD5.
 
 .INPUTS
-A string for text-hash or securest ring for password-hash calculation can be handed over via the pipeline.
+A string for text hashing or a secure string for password hashing can be passed through the pipeline.
 
 .OUTPUTS
-For text-hash calculation we returned a stringhashinfo object to the pipeline.A string object for the password calculation.
+Returns a `StringHashInfo` object for text hashing and a PBKDF2-SHA512 hash string for password hashing.
 
 .EXAMPLE
-Get-StringHash -Text 'Das ist ein Testtext!'
-Determines the SHA512 Hash value of the text 'This is a test text!'.
+Get-StringHash -Text 'This is a test text!'
+Determines the SHA512 hash value of the supplied text.
 
 .EXAMPLE
 Get-StringHash -Password ('P@$$w0rd!' | ConvertTo-SecureString -AsPlainText) -Salt 'vb23er45zu'
-Determine the password hash taking into account the salt value (see also notes).
+Determines the password hash while applying the provided salt value.
 
 .EXAMPLE
-'Baumhaus!1234', 'SuppenTüte471', 'DingDong00815' | Get-StringHash -Algorithm MD5
-Gives back three StringHashInfo object.
+'ForestHouse!1234', 'SoupBag471', 'DoorBell00815' | Get-StringHash -Algorithm MD5
+Returns three `StringHashInfo` objects.
 
 .EXAMPLE
-'Baumhaus!1234', 'SuppenTüte471', 'DingDong00815' | ConvertTo-SecureString -AsPlainText | Get-StringHash -Salt 'qweasdyxc'
-Gives back three password hashes.
+'ForestHouse!1234', 'SoupBag471', 'DoorBell00815' | ConvertTo-SecureString -AsPlainText | Get-StringHash -Salt 'qweasdyxc'
+Returns three password hashes.
 #>
 function Get-StringHash {
     [CmdletBinding(DefaultParameterSetName = 'Text')]
@@ -70,40 +70,65 @@ begin {
 
     process {
         
-        switch ($PSCmdlet.ParameterSetName) {
-            'Password' { 
-                $Algorithm = 'MD5'
-                $My.Duration = 20000
-                $My.BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($Password)
-                $My.Hash = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($My.BSTR)
-                break
+        if ($PSCmdlet.ParameterSetName -eq 'Password') {
+            $My.Iterations = 100000
+            $My.KeyLength = 32
+            $My.BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($Password)
+
+            try {
+                $My.PasswordText = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($My.BSTR)
             }
-            'Text' { 
-                $My.Duration = 1
-                $My.Hash = $Text
-                break
+            finally {
+                if ($My.BSTR -ne [IntPtr]::Zero) {
+                    [System.Runtime.InteropServices.Marshal]::ZeroFreeBSTR($My.BSTR)
+                    $My.BSTR = [IntPtr]::Zero
+                }
             }
+
+            $My.SaltBytes = [System.Text.Encoding]::UTF8.GetBytes($Salt)
+            $My.Pbkdf2 = [System.Security.Cryptography.Rfc2898DeriveBytes]::new(
+                $My.PasswordText,
+                $My.SaltBytes,
+                $My.Iterations,
+                [System.Security.Cryptography.HashAlgorithmName]::SHA512
+            )
+
+            try {
+                $My.Result = [System.Convert]::ToBase64String($My.Pbkdf2.GetBytes($My.KeyLength))
+            }
+            finally {
+                $My.Pbkdf2.Dispose()
+            }
+
+            $My.PasswordText = $null
+            return $My.Result
         }
+
+        $My.Duration = 1
+        $My.Hash = $Text
 
         for ($i = 0; $i -lt $My.Duration; $i++) {
             $My.TextBytes = [System.Text.Encoding]::UTF8.GetBytes($My.Hash + $Salt)
-            $My.HashBytes = Invoke-Expression -Command ('[System.Security.Cryptography.{0}]::HashData($My.TextBytes)' -f $Algorithm)
+            $My.HashBytes = switch ($Algorithm.ToUpperInvariant()) {
+                'MD5' {
+                    [System.Security.Cryptography.MD5]::HashData($My.TextBytes)
+                    break
+                }
+                'SHA512' {
+                    [System.Security.Cryptography.SHA512]::HashData($My.TextBytes)
+                    break
+                }
+                default {
+                    throw "Unsupported hash algorithm: $Algorithm"
+                }
+            }
             $My.Hash = [System.Convert]::ToBase64String($My.HashBytes)
         }
 
-        switch ($PSCmdlet.ParameterSetName) {
-            'Password' { 
-                $My.Result = $My.Hash
-                break
-            }
-            'Text' { 
-                $My.Result = New-Object -TypeName StringHashInfo
-                $My.Result.Algorithm = $Algorithm.ToUpper()
-                $My.Result.Hash = $My.Hash
-                $My.Result.Text = $Text
-                break
-            }
-        }
+        $My.Result = New-Object -TypeName StringHashInfo
+        $My.Result.Algorithm = $Algorithm.ToUpper()
+        $My.Result.Hash = $My.Hash
+        $My.Result.Text = $Text
         
         return $My.Result
     }

@@ -23,7 +23,7 @@ Describe "Get-StrictMode Test" {
         Get-StrictMode | Should -BeExactly '3.0'
     }
     
-    # ! Geht nicht, warum k.a.!
+    # Not working reliably yet.
     # It "Detected Strict-Mode Off" {
     #     Set-StrictMode -Off
     #     Get-StrictMode | Should -BeExactly '0.0'

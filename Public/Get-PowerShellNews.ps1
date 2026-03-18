@@ -15,28 +15,37 @@ function Get-PowerShellNews {
         [datetime]$AfterDate = [datetime]::MinValue
     )
     begin {
-        $My = [HashTable]::Synchronized(@{})
-        $My.ESC = [char]0x1b
-        $My.FormatHeader = "$($My.ESC)[95m"
-        $My.FormatDefault = "$($My.ESC)[0m"
-        if (-not $host.UI.SupportsVirtualTerminal) {
-            $My.FormatHeader = [String]::Empty
-            $My.FormatDefault = [String]::Empty
+        $supportsVirtualTerminal = $host.UI.SupportsVirtualTerminal
+        $formatDefault = [string]::Empty
+        if ($supportsVirtualTerminal) {
+            $formatDefault = "$([char]0x1b)[0m"
         }
-        "$($My.FormatHeader)
-        $($My.FormatDefault)" | Out-Host
-        "$($My.FormatHeader)Microsoft PowerShell Blog News (https://devblogs.microsoft.com/powershell):$($My.FormatDefault)" | Write-Host
+
+        Write-Verbose 'Fetching Microsoft PowerShell blog news from the official feed.'
+
         try {
-            $My.Content = [xml](Invoke-WebRequest -Uri 'https://devblogs.microsoft.com/powershell/feed/' -ErrorAction Stop | Select-Object -ExpandProperty Content)
+            $content = Invoke-WebRequest -Uri 'https://devblogs.microsoft.com/powershell/feed/' -ErrorAction Stop |
+                Select-Object -ExpandProperty Content
+            $rssContent = [xml]$content
         }
         catch {
-            "Vermutlich ist das Internet aktuelle nicht zu erreichen. Daher können keine News abgerufen werden." | Write-Warning
-            exit
+            throw 'Unable to retrieve Microsoft PowerShell blog news. Check your internet connection and try again.'
         }
-        $My.Content.rss.channel.Item | Select-Object -Property @{Name = 'ReleaseDate'; Expression = { [DateTime]$_.pubDate } }, title, link | Where-Object -Property ReleaseDate -GE -Value $AfterDate | ForEach-Object -Process {
-            return [PSCustomObject]@{
+
+        $rssContent.rss.channel.Item |
+            Select-Object -Property @{Name = 'ReleaseDate'; Expression = { [DateTime]$_.pubDate } }, title, link |
+            Where-Object -Property ReleaseDate -GE -Value $AfterDate |
+            ForEach-Object -Process {
+            $newsText = if ($supportsVirtualTerminal) {
+                "`e]8;;$($_.link)`e\$($_.Title)`e]8;;`e\" + $formatDefault
+            }
+            else {
+                "$($_.Title) - $($_.link)"
+            }
+
+            [PSCustomObject]@{
                 Release = [datetime]$_.ReleaseDate
-                News    = "`e]8;;$($_.link)`e\$($_.Title)`e]8;;`e\" + $My.FormatDefault
+                News    = $newsText
             }
         }
     }

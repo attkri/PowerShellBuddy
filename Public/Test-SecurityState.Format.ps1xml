@@ -2,29 +2,35 @@
 <Configuration>
   <ViewDefinitions>
     <View>
-      <Name>SicherheitInfoCheck</Name>
+      <Name>SecurityInfoCheck</Name>
       <ViewSelectedBy>
-        <TypeName>SicherheitInfoCheck</TypeName>
+        <TypeName>SecurityInfoCheck</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
           <TableColumnHeader>
+            <Label>Id</Label>
             <Width>3</Width>
             <Alignment>Right</Alignment>
           </TableColumnHeader>
           <TableColumnHeader>
+            <Label>Status</Label>
             <Width>13</Width>
           </TableColumnHeader>
           <TableColumnHeader>
+            <Label>Category</Label>
             <Width>23</Width>
           </TableColumnHeader>
           <TableColumnHeader>
+            <Label>Check</Label>
             <Width>30</Width>
           </TableColumnHeader>
           <TableColumnHeader>
+            <Label>Actual</Label>
             <Width>30</Width>
           </TableColumnHeader>
           <TableColumnHeader>
+            <Label>Expected</Label>
             <Width>30</Width>
           </TableColumnHeader>
         </TableHeaders>
@@ -38,16 +44,16 @@
                 <PropertyName>Status</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Kategorie</PropertyName>
+                <PropertyName>Category</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Test</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>IST</PropertyName>
+                <PropertyName>Actual</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>SOLL</PropertyName>
+                <PropertyName>Expected</PropertyName>
               </TableColumnItem>
             </TableColumnItems>
           </TableRowEntry>

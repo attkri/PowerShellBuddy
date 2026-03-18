@@ -27,7 +27,7 @@ function Get-Enum {
             $_.GetExportedTypes() 
         } 
         catch { 
-            "Keine ExportedTypes vorhanden" | Write-Verbose 
+            'No exported types were found.' | Write-Verbose 
         } 
     } | Where-Object -FilterScript { $_.IsEnum -and $_.Name -IMatch $FindEnumName } | ForEach-Object -Process {
             return [PSCustomObject]@{

@@ -11,10 +11,16 @@ function Get-Weather {
         [switch]$OneLineOutput
     )
     
-    [string]$Uri = 'https://wttr.in/'                                  # Base URL
-    [string]$Uri += '<Location>' -replace '<Location>', $Location # Location
-    [string]$Uri += '?lang=<Language>' -replace '<Language>', $Language # Language
-    [string]$Uri += '&F'                                                # F => do not show the "Follow" line
+    $encodedLocation = if ([string]::IsNullOrWhiteSpace($Location)) {
+        [string]::Empty
+    }
+    else {
+        [uri]::EscapeDataString($Location)
+    }
+
+    $encodedLanguage = [uri]::EscapeDataString($Language)
+
+    [string]$Uri = "https://wttr.in/${encodedLocation}?lang=${encodedLanguage}&F"
     
     if ($OnlyCurrentWeather.IsPresent) {
         $Uri += '0' # only current weather
@@ -30,7 +36,7 @@ function Get-Weather {
         Invoke-RestMethod -Uri $Uri -UseBasicParsing -OperationTimeoutSeconds 3 -ErrorAction Stop -Verbose:$false
     }
     catch {
-        throw "We were unable to find your location or could not retrieve weather data. Please check your internet connection or the location provided."
+        throw "Unable to retrieve weather data. Check your internet connection or verify the requested location."
     }
 }
 
@@ -38,4 +44,3 @@ function Get-Weather {
 https://wttr.in/:help
 Get-Weather -Location Hamburg -Verbose -OneLineOutput
 #>
-

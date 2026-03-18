@@ -32,22 +32,38 @@ function Get-ModuleUpdate {
     )
 
     process {
-        Get-Module -Name $Name -ListAvailable | Sort-Object -Property 'Name' | ForEach-Object -Process {
-            $GalleyModule = $_ | Find-Module -ErrorAction Ignore | Sort-Object -Property 'Version' -Descending | Select-Object -First 1
+        $galleryModules = @{}
+
+        Get-Module -Name $Name -ListAvailable |
+            Group-Object -Property Name |
+            ForEach-Object -Process {
+                $_.Group | Sort-Object -Property Version -Descending | Select-Object -First 1
+            } |
+            Sort-Object -Property Name |
+            ForEach-Object -Process {
+            $localModule = $_
+
+            if (-not $galleryModules.ContainsKey($localModule.Name)) {
+                $galleryModules[$localModule.Name] = Find-Module -Name $localModule.Name -ErrorAction Ignore |
+                    Sort-Object -Property Version -Descending |
+                    Select-Object -First 1
+            }
+
+            $GalleyModule = $galleryModules[$localModule.Name]
             $Result = [ModuleInfo]::new()
-            $Result.Name = $_.Name
-            $Result.LocalModulePath = $_.ModuleBase
-            $Result.LocalVersion = $_.Version
+            $Result.Name = $localModule.Name
+            $Result.LocalModulePath = $localModule.ModuleBase
+            $Result.LocalVersion = $localModule.Version
             $Result.UpdateStatus = [ModuleUpdateStatus]::InPSGalleryNotFound
             if ($null -ne $GalleyModule) {
                 $Result.GalleryVersion = $GalleyModule.Version
                 $Result.UpdateStatus = [ModuleUpdateStatus]::UpToDate
-                if ([version]($GalleyModule.Version) -gt $_.Version) {
+                if ([version]($GalleyModule.Version) -gt $localModule.Version) {
                     $Result.UpdateStatus = [ModuleUpdateStatus]::UpdateNeed
                 }
             }
             
-            if($ShowAll -or $Result.UpdateStatus -eq [ModuleUpdateStatus]::UpdateNeed -or $Name -eq $_.Name) {
+            if($ShowAll -or $Result.UpdateStatus -eq [ModuleUpdateStatus]::UpdateNeed -or $Name -eq $localModule.Name) {
                 return $Result
             }
         }

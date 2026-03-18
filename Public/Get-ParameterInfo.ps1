@@ -1,4 +1,4 @@
-# TODO: Switch-Parameter für die Anzeige der Common-Parameter
+# TODO: Add a switch parameter to include common parameters in the output.
 
 class CmdletParameterInfo {
     [System.String]$Name
@@ -15,14 +15,14 @@ class CmdletParameterInfo {
 function Get-ParameterInfo {
     <#
         .SYNOPSIS
-        Zeigt eine Übersicht an Cmdlet-Parameter-Informationen die u.a. für das Verständnis der Cmdlet- und Pipeline-Verarbeitung hilfreich sind.
+        Shows an overview of command parameter metadata.
 
-        .PARAMETERNAME CommandName
-        Command-Let Name das Analysiert werden soll.
+        .PARAMETER CmdletName
+        Name of the command to analyze.
 
         .EXAMPLE
         Get-ParameterInfo -CmdletName Get-ChildItem
-        Zeigt Cmdlet-Parameter-Informationen für das Cmdlet Get-ChildItem
+        Shows parameter metadata for Get-ChildItem.
 
         .OUTPUTS
         CmdletParameterInfo
@@ -38,7 +38,7 @@ function Get-ParameterInfo {
                 return $true
             }
             catch {
-                throw "Das CommandLet $_ wurde nicht gefunden."
+                throw "The command $_ was not found."
             }
         })]
         [System.String]

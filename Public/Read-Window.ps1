@@ -1,30 +1,34 @@
-﻿function Read-Window {
+function Read-Window {
     [CmdletBinding(SupportsShouldProcess=$false)]
     <#
         .Synopsis
-            Öffnet eine InputBox
+            Opens a simple input dialog.
 
         .EXAMPLE
-            Read-Window -Title "Alte Dateien finden" -Message "Alte Dateien sind älter als?" -Default "01.01.2010"
+            Read-Window -Title "Find old files" -Message "Older than which date?" -Default "2010-01-01"
     #>
     [OutputType([PSCustomObject])]
     Param
     (
-        # Titel der InputBox
+        # Dialog title.
         [Parameter(Position=0)]
-        [string]$Title = "Titel",
+        [string]$Title = 'Title',
 
-        # Fragestellung in der InputBox
+        # Prompt text displayed in the dialog.
         [Parameter(Position=1)]
-        [string]$Message = "Frage",
+        [string]$Message = 'Prompt',
 
-        # Standard-Wert für die InputBox
+        # Default value shown in the input box.
         [Parameter(Position=2)]
         [string]$Default = [string]::Empty
     )
 
     Begin
     {
+        if (-not $IsWindows) {
+            throw 'Read-Window is currently supported on Windows only.'
+        }
+
         Add-Type -AssemblyName PresentationFramework
         Add-Type -AssemblyName System
         $script:UserResult = [string]::Empty
@@ -48,7 +52,7 @@
 	<TextBlock x:Name="MessageTextBlock" Grid.Row="0" Margin="0 0 0 15" />
 	<TextBox x:Name="InputTextBox" Grid.Row="1" Margin="0 0 0 15" />
 	<Button x:Name="OKButton" Grid.Row="2" Content="OK" HorizontalAlignment="Right" Width="80" Margin="0 0 90 0" IsDefault="True" />
-	<Button x:Name="Abbruch" Grid.Row="2" Content="ABBRUCH" HorizontalAlignment="Right" Width="80" IsCancel="True"  />
+	<Button x:Name="CancelButton" Grid.Row="2" Content="CANCEL" HorizontalAlignment="Right" Width="80" IsCancel="True"  />
 </Grid>
 </Window>
 "@
@@ -64,7 +68,6 @@
 
         $OkButton = $Windows.FindName("OKButton")
         $OkButton.Add_Click({
-            Write-Host $InputTextBox.Text
             $script:UserResult = $InputTextBox.Text
             $Windows.DialogResult =$true})
     }

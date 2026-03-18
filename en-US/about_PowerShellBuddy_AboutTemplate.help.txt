@@ -1,0 +1,27 @@
+TOPIC
+    about_PowerShellBuddy_AboutTemplate
+
+SHORT DESCRIPTION
+    Template for writing PowerShellBuddy about topics.
+
+LONG DESCRIPTION
+    Use this file as a simple reference when adding new about-topic help files
+    for the PowerShellBuddy module.
+
+    Keep topic names short, use clear examples, and prefer concise language.
+
+EXAMPLES
+    about_PowerShellBuddy
+    about_PowerShellBuddy_AboutTemplate
+
+NOTE
+    Generated help files should be encoded as UTF-8.
+
+SEE ALSO
+    about_PowerShellBuddy
+    https://learn.microsoft.com/powershell/
+
+KEYWORDS
+    about topic
+    help template
+    PowerShellBuddy
